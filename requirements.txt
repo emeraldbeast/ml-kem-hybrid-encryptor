@@ -1,0 +1,2 @@
+# No third-party Python packages are required. Python 3.10+ standard library only.
+# System dependency: OpenSSL 3.5.0+ with ML-KEM-768 support.

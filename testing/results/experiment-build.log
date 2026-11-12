@@ -1,0 +1,15 @@
+[ 25%] Building C object CMakeFiles/xwing_native.dir/native/src/xwing.c.o
+[ 50%] Linking C static library libxwing_native.a
+[ 50%] Built target xwing_native
+[ 75%] Building C object CMakeFiles/xwing_key_context_bench.dir/native/experiments/key_context_bench.c.o
+[100%] Linking C executable xwing_key_context_bench
+[100%] Built target xwing_key_context_bench
+Consolidate compiler generated dependencies of target xwing_native
+[ 50%] Built target xwing_native
+[ 75%] Building C object CMakeFiles/xwing_adversarial_stress.dir/testing/stress-tests/native_adversarial.c.o
+[100%] Linking C executable xwing_adversarial_stress
+[100%] Built target xwing_adversarial_stress
+[ 50%] Built target xwing_native
+[ 75%] Building C object CMakeFiles/xwing_secure_demo.dir/native/src/secure_demo.c.o
+[100%] Linking C executable xwing_secure_demo
+[100%] Built target xwing_secure_demo

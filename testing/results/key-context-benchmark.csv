@@ -1,0 +1,10 @@
+operation,implementation,iterations,total_ns,ns_per_op,ops_per_second,correctness
+keygen,baseline,2000,121231673,60615.84,16497.34,PASS
+encaps,baseline,2000,242887519,121443.76,8234.26,PASS
+decaps,baseline,2000,279887369,139943.68,7145.73,PASS
+repeated_exchange,baseline,2000,498416940,249208.47,4012.70,PASS
+encaps,prepared,2000,146964246,73482.12,13608.75,PASS
+decaps,prepared,2000,116872804,58436.40,17112.62,PASS
+repeated_exchange,prepared,2000,267239021,133619.51,7483.94,PASS
+complete_handshake,baseline,2000,614461581,307230.79,3254.88,PASS
+complete_handshake,per_key_context,2000,565229239,282614.62,3538.39,PASS

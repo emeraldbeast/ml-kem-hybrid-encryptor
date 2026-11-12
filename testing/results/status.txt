@@ -1,0 +1,26 @@
+Test run: 2026-11-08T12:51:14Z
+OpenSSL prefix: /opt/openssl-3.5
+Build directory: /mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758
+RUN dependency-check: bash -c set -e; python3 --version; openssl version; openssl list -kem-algorithms | grep -i ML-KEM; cmake --version | head -1; gcc --version | head -1; pkg-config --modversion openssl; gcc -dM -E -fopenmp - < /dev/null | grep _OPENMP
+EXIT dependency-check=0
+RUN configure: cmake -S . -B /mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758 -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/openssl-3.5
+EXIT configure=0
+RUN build: cmake --build /mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758 --parallel
+EXIT build=0
+RUN python-tests: python3 -m unittest discover -s tests -v
+EXIT python-tests=0
+RUN paper-demo: python3 run_demo.py
+EXIT paper-demo=0
+RUN native-demo: /mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/xwing_native_demo
+EXIT native-demo=0
+RUN secure-demo: /mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/xwing_secure_demo
+EXIT secure-demo=0
+RUN kem-benchmark: /mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/xwing_native_bench 1000
+EXIT kem-benchmark=0
+RUN ntt-benchmark: /mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/ntt_lab 10000
+EXIT ntt-benchmark=0
+RUN dashboard-health: dashboard_health
+EXIT dashboard-health=0
+RUN validate-results: python3 testing/validate_outputs.py
+EXIT validate-results=0
+FINAL RESULT: PASS (all stages and output validation succeeded)

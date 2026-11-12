@@ -1,0 +1,6 @@
+class,n,mean_ns,median_ns,variance_ns2,sd_ns
+valid,5000,141956.29,136092.00,1215945001.88,34870.40
+mlkem_bitflip,5000,141798.11,136606.50,1198739344.60,34622.82
+x25519_bitflip,5000,142401.52,136233.50,1694456053.37,41163.77
+welch_t_valid_vs_mlkem_bitflip,0.2276
+welch_t_valid_vs_x25519_bitflip,-0.5836

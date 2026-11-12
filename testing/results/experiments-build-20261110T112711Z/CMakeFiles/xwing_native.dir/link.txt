@@ -1,0 +1,2 @@
+/usr/bin/ar qc libxwing_native.a CMakeFiles/xwing_native.dir/native/src/xwing.c.o
+/usr/bin/ranlib libxwing_native.a

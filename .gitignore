@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.pem
+*.der
+*.bin
+*.jsonl
+.DS_Store
+/build/
+/cmake-build-*/

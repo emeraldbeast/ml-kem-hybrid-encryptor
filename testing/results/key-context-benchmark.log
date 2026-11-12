@@ -1,0 +1,1 @@
+compiler=11.4.0; openssl=OpenSSL 3.5.5 27 Jan 2026; iterations=2000; prepared_setup=excluded_from_repeated_op_latency

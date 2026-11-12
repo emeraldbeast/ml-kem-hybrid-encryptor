@@ -1,0 +1,1 @@
+PASS: 2400 valid round trips (30 keypairs x 40 per mode); null/invalid-mode, zeroization, low-order X25519, ML-KEM implicit-rejection checks.

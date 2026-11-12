@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/xwing_adversarial_stress.dir/testing/stress-tests/native_adversarial.c.o -o xwing_adversarial_stress  -Wl,-rpath,/opt/openssl-3.5/lib64 libxwing_native.a -lm /opt/openssl-3.5/lib64/libcrypto.so /usr/lib/gcc/x86_64-linux-gnu/11/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a 

@@ -1,0 +1,3 @@
+Draft-11 X-Wing round trip: matching 32-byte secrets (not displayed).
+research hash-CT comparator round trip: matching 32-byte secrets (not displayed).
+The hash-CT comparator is research-only and does not interoperate with draft 11.

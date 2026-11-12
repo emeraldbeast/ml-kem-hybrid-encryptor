@@ -1,0 +1,7 @@
+/mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/CMakeFiles/xwing_native.dir
+/mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/CMakeFiles/xwing_native_demo.dir
+/mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/CMakeFiles/xwing_secure_demo.dir
+/mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/CMakeFiles/xwing_native_bench.dir
+/mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/CMakeFiles/ntt_lab.dir
+/mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Dhananjay/OneDrive/Attachments/Desktop/Cryptography SOP/X-Wing_Final_Project/testing/results/build-20261108T125114Z-758/CMakeFiles/rebuild_cache.dir

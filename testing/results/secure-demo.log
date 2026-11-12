@@ -1,0 +1,2 @@
+Draft-11 KEM -> HKDF-SHA256 -> AES-256-GCM: message authenticated and recovered.
+This local demonstration does not authenticate the recipient public key or peer identity.

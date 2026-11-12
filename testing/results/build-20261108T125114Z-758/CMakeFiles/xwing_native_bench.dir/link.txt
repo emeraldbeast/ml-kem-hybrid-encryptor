@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG CMakeFiles/xwing_native_bench.dir/native/src/benchmark.c.o -o xwing_native_bench  -Wl,-rpath,/opt/openssl-3.5/lib64 libxwing_native.a /opt/openssl-3.5/lib64/libcrypto.so /usr/lib/gcc/x86_64-linux-gnu/11/libgomp.so /usr/lib/x86_64-linux-gnu/libpthread.a 

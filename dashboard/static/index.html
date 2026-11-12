@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>X-Wing Lab — Hybrid KEM Baseline</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="X-Wing Lab home">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span><strong>X-WING</strong><small>HYBRID KEM LAB</small></span>
+      </a>
+      <nav class="main-nav" aria-label="Page sections">
+        <a href="#explainer">How it works</a>
+        <a href="#flow-grid">Live trace</a>
+        <a href="#research">Research paths</a>
+      </nav>      <div class="topbar-right">
+        <span class="pill pill-muted"><span class="dot dot-green"></span> LOCAL LAB</span>
+        <span id="runtime-status" class="runtime-status"><span class="dot dot-amber"></span> Checking OpenSSL…</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> ORIGINAL PAPER CONSTRUCTION · FIGURE 12</div>
+          <h1>Two cryptographic worlds.<br><span>One shared secret.</span></h1>
+          <p class="hero-desc">Run the real X-Wing key-encapsulation flow: classical X25519 + post-quantum ML-KEM-768, combined with SHA3-256.</p>
+          <div class="hero-actions">
+            <button id="run-button" class="button button-primary" type="button">
+              <span class="button-symbol">▶</span><span id="run-label">Run actual handshake</span>
+            </button>
+            <button id="reset-button" class="button button-ghost" type="button">Reset trace</button>
+          </div>
+          <div class="hero-footnote"><span class="pulse-dot"></span><span>Every run executes cryptographic operations through your local OpenSSL installation.</span></div>
+        </div>
+        <div class="hero-art" aria-label="Illustration of two cryptographic paths joining at a hash combiner">
+          <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+          <div class="art-center"><span class="art-lock">⌁</span><strong>SHA3-256</strong><small>COMBINER</small></div>
+          <div class="art-node art-node-classical"><span class="node-number">01</span><strong>X25519</strong><small>CLASSICAL</small><i></i></div>
+          <div class="art-node art-node-pqc"><span class="node-number">02</span><strong>ML-KEM</strong><small>POST-QUANTUM</small><i></i></div>
+          <div class="art-spark spark-one">✳</div><div class="art-spark spark-two">✧</div>
+          <div class="art-bottom"><span class="tiny-check">✓</span> 32-BYTE HYBRID KEY</div>
+        </div>
+      </section>
+
+      <section class="notice-row">
+        <div class="notice-icon">i</div>
+        <div><strong>Research prototype, not production software.</strong> This follows the original paper's Figure 12, not a later X-Wing draft. It establishes a shared secret; it does not authenticate peers or encrypt application messages.</div>
+      </section>
+
+      <section class="explainer" id="explainer" aria-labelledby="explainer-title">
+        <div class="explainer-heading">
+          <div>
+            <div class="eyebrow">THE IDEA IN THREE MOVES</div>
+            <h2 id="explainer-title">A KEM creates a shared key. It does not encrypt your message.</h2>
+            <p>Think of X-Wing as a way for a sender and recipient to arrive at the same secret using two different mathematical routes.</p>
+          </div>
+          <div class="kem-badge"><span class="kem-badge-mark">K</span><span><strong>Key encapsulation</strong><small>Agree first · encrypt later</small></span></div>
+        </div>
+        <div class="story-grid">
+          <article class="story-card story-recipient">
+            <span class="story-kicker">01 · RECIPIENT</span><div class="story-icon">⌑</div>
+            <h3>Publish one hybrid public key</h3>
+            <p>The recipient makes an ML-KEM-768 public key and an X25519 public key available. The matching private material stays with the recipient.</p>
+            <div class="story-code"><span>pk =</span> <b>pk<sub>ML-KEM</sub></b> <i>||</i> <b>pk<sub>X25519</sub></b></div>
+          </article>
+          <article class="story-card story-sender">
+            <span class="story-kicker">02 · SENDER</span><div class="story-icon">↗</div>
+            <h3>Run both branches independently</h3>
+            <p>ML-KEM encapsulation and ephemeral X25519 each create a component secret. Their ciphertext pieces travel to the recipient.</p>
+            <div class="branch-pair">
+              <div class="branch branch-pq"><span>POST-QUANTUM</span><strong>ML-KEM-768</strong><small>ss<sub>M</sub> + ct<sub>M</sub></small></div>
+              <div class="branch branch-classical"><span>CLASSICAL</span><strong>X25519</strong><small>ss<sub>X</sub> + ct<sub>X</sub></small></div>
+            </div>
+          </article>
+          <article class="story-card story-recipient">
+            <span class="story-kicker">03 · BOTH SIDES</span><div class="story-icon">⟲</div>
+            <h3>Combine, then use the key</h3>
+            <p>The receiver recovers both component secrets from the ciphertext. Both sides hash the same ordered inputs and get the same 32-byte result.</p>
+            <div class="story-code"><span>shared key =</span> <b>SHA3-256(…)</b></div>
+          </article>
+        </div>
+        <div class="story-wire">
+          <div class="wire-copy"><span class="wire-label">WHAT CROSSES THE NETWORK</span><strong>One ciphertext, two components</strong><small>c = ct<sub>M</sub> || ct<sub>X</sub></small></div>
+          <div class="wire-block wire-pq"><span>ML-KEM ciphertext</span><strong>1,088 bytes</strong></div><span class="wire-plus">+</span>
+          <div class="wire-block wire-x"><span>X25519 ephemeral public value</span><strong>32 bytes</strong></div>
+          <div class="wire-total"><span>TOTAL</span><strong>1,120 <small>bytes</small></strong></div>
+        </div>
+        <div class="why-panel">
+          <div class="why-mark">?</div>
+          <div><strong>Why does the paper leave ct<sub>M</sub> out of the final hash?</strong>
+            <p>For this specific X-Wing construction, the paper's security analysis uses a property of ML-KEM ciphertexts to justify a shorter combiner input. The final SHA3-256 input is 134 bytes here. This is a construction-specific result; a generic hybrid KEM must not copy the omission without its own analysis.</p>
+          </div>
+          <button id="why-toggle" class="why-toggle" type="button" aria-expanded="false" aria-controls="why-more">More context</button>
+          <p id="why-more" class="why-more" hidden>The research comparison in this project adds the 1,088-byte ML-KEM ciphertext to the combiner input, bringing it to 1,222 bytes. That mode exists only to study the hashing cost and is not wire-compatible X-Wing.</p>
+        </div>
+      </section>
+      <section class="section-head">
+        <div><div class="eyebrow">LIVE EXECUTION TRACE</div><h2>Follow the handshake</h2></div>
+        <label class="toggle-label"><input id="details-toggle" type="checkbox" checked><span class="toggle-track"></span><span>Show algorithm details</span></label>
+      </section>
+
+      <section class="flow-grid" id="flow-grid">
+        <article class="flow-card" data-id="keygen-mlkem">
+          <div class="flow-card-top"><span class="step-index">01</span><span class="step-tag tag-pqc">POST-QUANTUM</span></div>
+          <div class="flow-icon icon-purple">⌬</div><h3>ML-KEM-768 KeyGen</h3>
+          <p>Generate the lattice-based public and private key pair.</p>
+          <div class="flow-size"><span>Public key</span><strong>1,184 B</strong></div>
+          <div class="flow-size"><span>Private key</span><strong>2,400 B</strong></div>
+          <div class="step-runtime">Awaiting run</div>
+          <div class="step-detail"></div>
+        </article>
+        <article class="flow-card" data-id="keygen-x25519">
+          <div class="flow-card-top"><span class="step-index">02</span><span class="step-tag tag-blue">CLASSICAL</span></div>
+          <div class="flow-icon icon-blue">↗</div><h3>X25519 KeyGen</h3>
+          <p>Create the recipient's static elliptic-curve key pair.</p>
+          <div class="flow-size"><span>Public key pk₂</span><strong>32 B</strong></div>
+          <div class="flow-size"><span>Private scalar</span><strong>32 B</strong></div>
+          <div class="step-runtime">Awaiting run</div>
+          <div class="step-detail"></div>
+        </article>
+        <article class="flow-card" data-id="encaps-mlkem">
+          <div class="flow-card-top"><span class="step-index">03</span><span class="step-tag tag-pqc">ENCAPSULATE</span></div>
+          <div class="flow-icon icon-purple">⇢</div><h3>ML-KEM Encaps</h3>
+          <p>Sender gets a component secret and a public ciphertext.</p>
+          <div class="flow-size"><span>Ciphertext c₁</span><strong>1,088 B</strong></div>
+          <div class="flow-size"><span>Component key k₁</span><strong>32 B</strong></div>
+          <div class="step-runtime">Awaiting run</div>
+          <div class="step-detail"></div>
+        </article>
+        <article class="flow-card" data-id="encaps-x25519">
+          <div class="flow-card-top"><span class="step-index">04</span><span class="step-tag tag-blue">ENCAPSULATE</span></div>
+          <div class="flow-icon icon-blue">⇄</div><h3>X25519 Diffie–Hellman</h3>
+          <p>Generate ephemeral public value c₂ and derive k₂.</p>
+          <div class="flow-size"><span>Ciphertext c₂</span><strong>32 B</strong></div>
+          <div class="flow-size"><span>Component key k₂</span><strong>32 B</strong></div>
+          <div class="step-runtime">Awaiting run</div>
+          <div class="step-detail"></div>
+        </article>
+        <article class="flow-card flow-card-wide" data-id="encaps-combine">
+          <div class="flow-card-top"><span class="step-index">05</span><span class="step-tag tag-mint">KEY COMBINATION</span></div>
+          <div class="wide-flow-content"><div class="flow-icon icon-mint">#</div><div><h3>SHA3-256 Combiner</h3><p>Hash the six-byte domain label, both 32-byte secrets, the X25519 ciphertext and the recipient's X25519 public key.</p></div></div>
+          <div class="formula"><span>label <b>6 B</b></span><span>k₁ <b>32 B</b></span><span>k₂ <b>32 B</b></span><span>c₂ <b>32 B</b></span><span>pk₂ <b>32 B</b></span><span class="formula-total">TOTAL <b>134 B</b></span></div>
+          <div class="step-runtime">Awaiting run</div>
+          <div class="step-detail"></div>
+        </article>
+        <article class="flow-card" data-id="decaps-mlkem">
+          <div class="flow-card-top"><span class="step-index">06</span><span class="step-tag tag-pqc">DECAPSULATE</span></div>
+          <div class="flow-icon icon-purple">⇠</div><h3>ML-KEM Decaps</h3>
+          <p>Recipient uses the private key and c₁ to recover k₁′.</p>
+          <div class="flow-size"><span>Input c₁</span><strong>1,088 B</strong></div>
+          <div class="flow-size"><span>Recovered key k₁′</span><strong>32 B</strong></div>
+          <div class="step-runtime">Awaiting run</div>
+          <div class="step-detail"></div>
+        </article>
+        <article class="flow-card" data-id="decaps-x25519">
+          <div class="flow-card-top"><span class="step-index">07</span><span class="step-tag tag-blue">DECAPSULATE</span></div>
+          <div class="flow-icon icon-blue">⇄</div><h3>X25519 Decapsulation</h3>
+          <p>Recipient combines sk₂ with the sender's public value c₂.</p>
+          <div class="flow-size"><span>Input c₂</span><strong>32 B</strong></div>
+          <div class="flow-size"><span>Recovered key k₂′</span><strong>32 B</strong></div>
+          <div class="step-runtime">Awaiting run</div>
+          <div class="step-detail"></div>
+        </article>
+        <article class="flow-card flow-card-medium" data-id="decaps-combine">
+          <div class="flow-card-top"><span class="step-index">08</span><span class="step-tag tag-mint">KEY COMBINATION</span></div>
+          <div class="flow-icon icon-mint">#</div><h3>Recipient SHA3-256</h3>
+          <p>Hash the same ordered values to derive K_receiver.</p>
+          <div class="flow-size"><span>Combiner input</span><strong>134 B</strong></div>
+          <div class="flow-size"><span>Shared key</span><strong>32 B</strong></div>
+          <div class="step-runtime">Awaiting run</div>
+          <div class="step-detail"></div>
+        </article>
+        <article class="flow-card flow-card-medium" data-id="verify">
+          <div class="flow-card-top"><span class="step-index">09</span><span class="step-tag tag-mint">VERIFY</span></div>
+          <div class="flow-icon icon-mint">✓</div><h3>Compare both secrets</h3>
+          <p>The sender and recipient should obtain identical 32-byte output.</p>
+          <div class="flow-size"><span>ML-KEM match</span><strong>—</strong></div>
+          <div class="flow-size"><span>X25519 + hybrid match</span><strong>—</strong></div>
+          <div class="step-runtime">Awaiting run</div>
+          <div class="step-detail"></div>
+        </article>
+      </section>
+
+      <section class="results-grid">
+        <article class="panel panel-result">
+          <div class="panel-heading"><div><div class="eyebrow">CORRECTNESS</div><h2>Both sides agree</h2></div><span id="result-status" class="pill pill-muted">NOT RUN</span></div>
+          <p class="panel-intro">The receiver decapsulates each component and applies the same ordered combiner input.</p>
+          <div class="agreement-row"><div class="agreement-label"><span class="mini-chip chip-blue">S</span><div><strong>Sender's hybrid key</strong><small>SHA-256 fingerprint prefix</small></div></div><code id="sender-fingerprint">—</code></div>
+          <div class="agreement-row"><div class="agreement-label"><span class="mini-chip chip-green">R</span><div><strong>Receiver's hybrid key</strong><small>SHA-256 fingerprint prefix</small></div></div><code id="receiver-fingerprint">—</code></div>
+          <div id="agreement-banner" class="agreement-banner"><span class="banner-symbol">○</span><span>Run the handshake to check shared-secret agreement.</span></div>
+          <div class="secret-note">Raw private keys and shared secrets stay server-side. The UI receives short fingerprints and public-data previews only.</div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading"><div><div class="eyebrow">ENCODING SIZES</div><h2>Bytes on the wire</h2></div><span class="unit-label">ORIGINAL PAPER</span></div>
+          <div class="size-row"><div><span class="size-dot dot-purple"></span><span>ML-KEM ciphertext c₁</span></div><strong>1,088 <small>B</small></strong></div>
+          <div class="size-bar"><span style="width:96.2%"></span></div>
+          <div class="size-row"><div><span class="size-dot dot-blue"></span><span>X25519 ciphertext c₂</span></div><strong>32 <small>B</small></strong></div>
+          <div class="size-bar"><span class="size-blue" style="width:2.9%"></span></div>
+          <div class="size-row size-row-total"><div><span class="size-dot dot-mint"></span><span>Combined X-Wing ciphertext</span></div><strong id="ciphertext-total">1,120 <small>B</small></strong></div>
+          <div class="size-meta"><div><span>Public key</span><strong>1,216 B</strong></div><div><span>Private key</span><strong>2,464 B</strong></div><div><span>Shared secret</span><strong>32 B</strong></div></div>
+        </article>
+
+        <article class="panel panel-combiner">
+          <div class="panel-heading"><div><div class="eyebrow">THE PAPER'S DESIGN CHOICE</div><h2>Combiner input</h2></div><span class="pill pill-mint">SHA3-256</span></div>
+          <div class="combiner-visual">
+            <div class="combiner-token token-label"><span>label</span><b>6 B</b></div><div class="operator">+</div>
+            <div class="combiner-token token-purple"><span>k₁</span><b>32 B</b></div><div class="operator">+</div>
+            <div class="combiner-token token-blue"><span>k₂</span><b>32 B</b></div><div class="operator">+</div>
+            <div class="combiner-token token-blue"><span>c₂</span><b>32 B</b></div><div class="operator">+</div>
+            <div class="combiner-token token-green"><span>pk₂</span><b>32 B</b></div>
+          </div>
+          <div class="hash-equation"><code>SHA3-256(label || k₁ || k₂ || c₂ || pk₂)</code><span>→ 32-byte key</span></div>
+          <p class="small-callout"><strong>Notice:</strong> the original paper omits the 1,088-byte ML-KEM ciphertext c₁ from this hash input. That is a specific, proven design choice in this construction—not a general rule for hybrid KEMs.</p>
+        </article>
+
+        <article class="panel panel-timings">
+          <div class="panel-heading"><div><div class="eyebrow">MEASURED ON THIS MACHINE</div><h2>Operation timings</h2></div><span class="unit-label">MILLISECONDS</span></div>
+          <div id="timing-list" class="timing-list"><div class="empty-state">Timing data will appear after an actual run.</div></div>
+          <p class="timing-footnote">These wall-clock timings include OpenSSL process startup and file I/O. They are useful for observing this prototype, not for reproducing the paper's CPU-cycle benchmarks.</p>
+        </article>
+      </section>
+
+      <section class="panel trace-panel">
+        <div class="panel-heading"><div><div class="eyebrow">PUBLIC TRACE</div><h2>What the sender transmits</h2></div><span class="unit-label">CIPHERTEXT c = (c₁, c₂)</span></div>
+        <div class="public-trace-grid">
+          <div class="trace-item"><span class="trace-label">Recipient X25519 public key pk₂ · prefix</span><code id="pk-preview">Waiting for run</code><button class="copy-button" data-copy="pk-preview" type="button">Copy</button></div>
+          <div class="trace-item"><span class="trace-label">Ephemeral X25519 public value c₂ · prefix</span><code id="c2-preview">Waiting for run</code><button class="copy-button" data-copy="c2-preview" type="button">Copy</button></div>
+          <div class="trace-item trace-item-wide"><span class="trace-label">ML-KEM ciphertext c₁ · prefix (truncated)</span><code id="ct-preview">Waiting for run</code><button class="copy-button" data-copy="ct-preview" type="button">Copy</button></div>
+        </div>
+        <div class="trace-footer"><span><span class="dot dot-green"></span> Public-data previews only</span><button id="export-button" class="button button-small button-ghost" disabled type="button">Export run report JSON ↗</button></div>
+      </section>
+
+      <section class="research-section" id="research" aria-labelledby="research-title">
+        <div class="research-heading"><div class="eyebrow">WHERE THE PROJECT CAN GO NEXT</div><h2 id="research-title">Research extensions with practical value</h2><p>These ideas connect the construction to standards work and real deployment concerns.</p></div>
+        <div class="research-grid">
+          <article class="research-card"><span class="research-number">A</span><h3>Interoperability & known-answer vectors</h3><p>Add deterministic draft vectors, malformed-input cases, and differential checks against an independent implementation. Keep paper-baseline vectors separate from draft vectors.</p><span class="research-tag">Cryptographic correctness</span></article>
+          <article class="research-card"><span class="research-number">B</span><h3>TLS migration & compatibility</h3><p>Study a standardized hybrid TLS key share: handshake size, negotiation, middlebox failures, fallback behavior, and end-to-end latency. A KEM demo alone does not model a TLS deployment.</p><span class="research-tag">Protocol engineering</span></article>
+          <article class="research-card"><span class="research-number">C</span><h3>Measure parallel scaling honestly</h3><p>Compare single operations with batches, report speedup and efficiency, and explain when OpenMP overhead outweighs the work. Keep the NTT experiment outside the vetted KEM path.</p><span class="research-tag">Parallel computing</span></article>
+        </div>
+        <div class="version-note"><span class="version-note-dot"></span><span><strong>This live dashboard runs the original paper baseline.</strong> The separate native C program in this project targets X-Wing draft-11. Their key formats and combiner order differ; do not mix them.</span></div>
+      </section>
+      <footer class="footer"><span>CRYPTOGRAPHY SOP · BASELINE BUILD</span><span>Original paper · Figure 12 · Local only</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
+

@@ -1,0 +1,3 @@
+Draft-11 KEM -> HKDF-SHA256 -> AES-256-GCM: message authenticated and recovered.
+AES-GCM tamper checks: ciphertext=rejected, tag=rejected, wrong_key=rejected; failed output cleared=yes.
+This local demonstration does not authenticate the recipient public key or peer identity.

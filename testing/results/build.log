@@ -1,0 +1,15 @@
+[ 20%] Building C object CMakeFiles/xwing_native.dir/native/src/xwing.c.o
+[ 20%] Building C object CMakeFiles/ntt_lab.dir/native/experiments/ntt/ntt_lab.c.o
+[ 30%] Linking C static library libxwing_native.a
+[ 40%] Linking C executable ntt_lab
+[ 40%] Built target xwing_native
+[ 60%] Building C object CMakeFiles/xwing_native_demo.dir/native/src/demo.c.o
+[ 60%] Building C object CMakeFiles/xwing_secure_demo.dir/native/src/secure_demo.c.o
+[ 70%] Building C object CMakeFiles/xwing_native_bench.dir/native/src/benchmark.c.o
+[ 70%] Built target ntt_lab
+[ 80%] Linking C executable xwing_native_demo
+[100%] Linking C executable xwing_secure_demo
+[100%] Linking C executable xwing_native_bench
+[100%] Built target xwing_native_demo
+[100%] Built target xwing_secure_demo
+[100%] Built target xwing_native_bench

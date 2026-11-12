@@ -1,0 +1,12 @@
+capture_utc=20261110T112711Z
+system=Linux DESKTOP-T5IM2DQ 5.15.167.4-microsoft-standard-WSL2 #1 SMP Tue Nov 5 00:21:55 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux
+openssl=/opt/openssl-3.5/bin/openssl: /lib/x86_64-linux-gnu/libssl.so.3: version `OPENSSL_3.4.0' not found (required by /opt/openssl-3.5/bin/openssl)
+/opt/openssl-3.5/bin/openssl: /lib/x86_64-linux-gnu/libssl.so.3: version `OPENSSL_3.2.0' not found (required by /opt/openssl-3.5/bin/openssl)
+/opt/openssl-3.5/bin/openssl: /lib/x86_64-linux-gnu/libcrypto.so.3: version `OPENSSL_3.0.9' not found (required by /opt/openssl-3.5/bin/openssl)
+/opt/openssl-3.5/bin/openssl: /lib/x86_64-linux-gnu/libcrypto.so.3: version `OPENSSL_3.3.0' not found (required by /opt/openssl-3.5/bin/openssl)
+/opt/openssl-3.5/bin/openssl: /lib/x86_64-linux-gnu/libcrypto.so.3: version `OPENSSL_3.5.0' not found (required by /opt/openssl-3.5/bin/openssl)
+/opt/openssl-3.5/bin/openssl: /lib/x86_64-linux-gnu/libcrypto.so.3: version `OPENSSL_3.4.0' not found (required by /opt/openssl-3.5/bin/openssl)
+/opt/openssl-3.5/bin/openssl: /lib/x86_64-linux-gnu/libcrypto.so.3: version `OPENSSL_3.2.0' not found (required by /opt/openssl-3.5/bin/openssl)
+OpenSSL 3.0.2 15 Mar 2022 (Library: OpenSSL 3.0.2 15 Mar 2022)
+key_context_iterations=2000
+timing_rounds_per_class=5000

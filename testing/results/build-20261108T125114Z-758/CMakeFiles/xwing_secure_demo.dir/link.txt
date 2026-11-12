@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG CMakeFiles/xwing_secure_demo.dir/native/src/secure_demo.c.o -o xwing_secure_demo  -Wl,-rpath,/opt/openssl-3.5/lib64 libxwing_native.a /opt/openssl-3.5/lib64/libcrypto.so 

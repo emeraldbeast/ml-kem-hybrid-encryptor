@@ -1,0 +1,10 @@
+algorithm,threads,n,operations,seconds,operations_per_second,speedup,efficiency
+naive,1,256,100,0.013890,7199.68,1.0000,1.0000
+ntt_precomputed_twiddles,1,256,100,0.002324,43021.43,5.9755,5.9755
+ntt_openmp_batch,1,256,100,0.003559,28096.82,0.6531,0.6531
+ntt_openmp_batch,2,256,100,0.002494,40101.36,0.9321,0.4661
+ntt_openmp_batch,4,256,100,0.002699,37054.63,0.8613,0.2153
+ntt_openmp_batch,8,256,100,0.015486,6457.39,0.1501,0.0188
+ntt_stage_parallel,2,256,100,0.009684,10326.00,0.2400,0.1200
+ntt_stage_parallel,4,256,100,0.004012,24926.59,0.5794,0.1448
+ntt_stage_parallel,8,256,100,0.016771,5962.51,0.1386,0.0173

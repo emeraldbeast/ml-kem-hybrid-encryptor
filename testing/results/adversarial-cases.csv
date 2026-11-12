@@ -1,0 +1,12 @@
+kind,test,decapsulation,shared_secret_match,aes_gcm_accepted,output_cleared,result
+adversarial,valid_ciphertext,DECAPPED,1,1,NA,PASS
+aead,correct_ciphertext_and_tag,NA,NA,1,NA,PASS
+adversarial,mlkem_single_bit,DECAPPED,0,0,1,PASS
+adversarial,mlkem_multiple_bits,DECAPPED,0,0,1,PASS
+adversarial,x25519_public_bitflip,DECAPPED,0,0,1,PASS
+adversarial,wrong_recipient_private_key,DECAPPED,0,0,1,PASS
+adversarial,low_order_x25519_value,REJECTED,0,0,1,PASS
+adversarial,truncated_ciphertext,NOT_TESTABLE_FIXED_SIZE_API,0,0,0,REQUIRES_CALLER_LENGTH_CHECK
+aead,ciphertext_bitflip,NA,NA,0,1,PASS
+aead,tag_bitflip,NA,NA,0,1,PASS
+aead,wrong_aes_key,NA,NA,0,1,PASS

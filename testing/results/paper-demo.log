@@ -1,0 +1,218 @@
+{
+  "ok": true,
+  "algorithm": "X-Wing original-paper baseline",
+  "paper_reference": "Barbosa et al., 'X-Wing: The Hybrid KEM You've Been Looking For', Figure 12",
+  "timestamp_utc": "2026-11-08T12:51:30.086422+00:00",
+  "runtime": {
+    "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+    "python": "3.10.12",
+    "implementation": "OpenSSL CLI + Python hashlib.sha3_256"
+  },
+  "label_ascii": "\\.//^\\",
+  "label_hex": "5c2e2f2f5e5c",
+  "sizes_bytes": {
+    "mlkem_public_key": 1184,
+    "mlkem_private_key": 2400,
+    "x25519_private_key": 32,
+    "x25519_public_key": 32,
+    "xwing_public_key": 1216,
+    "xwing_private_key": 2464,
+    "mlkem_ciphertext": 1088,
+    "x25519_ciphertext": 32,
+    "xwing_ciphertext": 1120,
+    "component_shared_secret": 32,
+    "hybrid_shared_secret": 32,
+    "combiner_label": 6,
+    "combiner_input": 134
+  },
+  "actual_lengths_bytes": {
+    "mlkem_ciphertext": 1088,
+    "x25519_ciphertext": 32,
+    "xwing_ciphertext": 1120,
+    "mlkem_sender_secret": 32,
+    "x25519_sender_secret": 32,
+    "hybrid_sender_secret": 32,
+    "combiner_input": 134
+  },
+  "checks": {
+    "mlkem_component_match": true,
+    "x25519_component_match": true,
+    "hybrid_shared_secret_match": true
+  },
+  "fingerprints": {
+    "sender_hybrid_secret_sha256_prefix": "b18071874da19531",
+    "receiver_hybrid_secret_sha256_prefix": "b18071874da19531",
+    "mlkem_component_secret_sha256_prefix": "0f92d444571a23d9",
+    "x25519_component_secret_sha256_prefix": "e2905fd578302463"
+  },
+  "public_previews": {
+    "recipient_x25519_public_hex_prefix": "0ead597fe790f9e2acef573e",
+    "ephemeral_x25519_public_hex_prefix": "f234b856bda0d776f97dffc8",
+    "mlkem_ciphertext_hex_prefix": "ee3ccc588bcbabf9c76bf8cfb4a54b0e"
+  },
+  "timings_ms": {
+    "keygen_mlkem_ms": 18.474,
+    "keygen_x25519_ms": 25.003,
+    "encaps_mlkem_ms": 6.802,
+    "encaps_x25519_keygen_ms": 20.457,
+    "encaps_x25519_dh_ms": 6.007,
+    "decaps_mlkem_ms": 5.904,
+    "decaps_x25519_dh_ms": 5.651,
+    "encaps_combiner_ms": 0.031,
+    "decaps_combiner_ms": 0.015,
+    "total_roundtrip_ms": 89.717
+  },
+  "steps": [
+    {
+      "id": "keygen-mlkem",
+      "title": "Generate ML-KEM-768 keys",
+      "short": "POST-QUANTUM KEYGEN",
+      "elapsed_ms": 18.474,
+      "inputs": [
+        "OpenSSL RNG"
+      ],
+      "outputs": [
+        "pk\u2081: 1,184 B",
+        "sk\u2081: 2,400 B"
+      ],
+      "explanation": "Generate the lattice-based KEM key pair used by the post-quantum branch.",
+      "status": "complete"
+    },
+    {
+      "id": "keygen-x25519",
+      "title": "Generate recipient X25519 keys",
+      "short": "CLASSICAL KEYGEN",
+      "elapsed_ms": 25.003,
+      "inputs": [
+        "OpenSSL RNG",
+        "X25519 base point"
+      ],
+      "outputs": [
+        "sk\u2082: 32 B",
+        "pk\u2082: 32 B"
+      ],
+      "explanation": "Generate the classical static X25519 key pair. The public key pk\u2082 is included in the combiner input.",
+      "status": "complete"
+    },
+    {
+      "id": "encaps-mlkem",
+      "title": "Encapsulate with ML-KEM-768",
+      "short": "POST-QUANTUM ENCAPSULATION",
+      "elapsed_ms": 6.802,
+      "inputs": [
+        "pk\u2081"
+      ],
+      "outputs": [
+        "c\u2081: 1,088 B",
+        "k\u2081: 32 B"
+      ],
+      "explanation": "The ML-KEM sender creates the first ciphertext component and its 32-byte shared secret.",
+      "status": "complete"
+    },
+    {
+      "id": "encaps-x25519",
+      "title": "Create the X25519 ciphertext and secret",
+      "short": "CLASSICAL ENCAPSULATION",
+      "elapsed_ms": 26.464,
+      "inputs": [
+        "pk\u2082",
+        "ephemeral randomness"
+      ],
+      "outputs": [
+        "c\u2082: 32 B",
+        "k\u2082: 32 B"
+      ],
+      "explanation": "The ephemeral public key is c\u2082. X25519 Diffie\u2013Hellman gives k\u2082 = DH(ske, pk\u2082).",
+      "status": "complete"
+    },
+    {
+      "id": "encaps-combine",
+      "title": "Combine the component secrets",
+      "short": "SHA3-256 COMBINER",
+      "elapsed_ms": 0.031,
+      "inputs": [
+        "label: 6 B",
+        "k\u2081: 32 B",
+        "k\u2082: 32 B",
+        "c\u2082: 32 B",
+        "pk\u2082: 32 B"
+      ],
+      "outputs": [
+        "K_sender: 32 B",
+        "input: 134 B"
+      ],
+      "explanation": "Compute SHA3-256(label || k\u2081 || k\u2082 || c\u2082 || pk\u2082). The original construction does not include the 1,088-byte ML-KEM ciphertext c\u2081 here.",
+      "status": "complete"
+    },
+    {
+      "id": "decaps-mlkem",
+      "title": "Decapsulate ML-KEM-768",
+      "short": "POST-QUANTUM DECAPSULATION",
+      "elapsed_ms": 5.904,
+      "inputs": [
+        "sk\u2081",
+        "c\u2081: 1,088 B"
+      ],
+      "outputs": [
+        "k\u2081\u2032: 32 B"
+      ],
+      "explanation": "The recipient recovers the ML-KEM component secret from its private key and c\u2081.",
+      "status": "complete"
+    },
+    {
+      "id": "decaps-x25519",
+      "title": "Recover the X25519 shared secret",
+      "short": "CLASSICAL DECAPSULATION",
+      "elapsed_ms": 5.651,
+      "inputs": [
+        "sk\u2082",
+        "c\u2082: 32 B"
+      ],
+      "outputs": [
+        "k\u2082\u2032: 32 B"
+      ],
+      "explanation": "The recipient computes k\u2082\u2032 = DH(sk\u2082, c\u2082). This should equal the sender's k\u2082.",
+      "status": "complete"
+    },
+    {
+      "id": "decaps-combine",
+      "title": "Derive the recipient's hybrid secret",
+      "short": "SHA3-256 COMBINER",
+      "elapsed_ms": 0.015,
+      "inputs": [
+        "label: 6 B",
+        "k\u2081\u2032: 32 B",
+        "k\u2082\u2032: 32 B",
+        "c\u2082: 32 B",
+        "pk\u2082: 32 B"
+      ],
+      "outputs": [
+        "K_receiver: 32 B",
+        "input: 134 B"
+      ],
+      "explanation": "The recipient hashes the same ordered fields to derive K_receiver.",
+      "status": "complete"
+    },
+    {
+      "id": "verify",
+      "title": "Verify shared-secret agreement",
+      "short": "CORRECTNESS CHECK",
+      "elapsed_ms": 0.0,
+      "inputs": [
+        "K_sender",
+        "K_receiver"
+      ],
+      "outputs": [
+        "32-byte equality check"
+      ],
+      "explanation": "The server compares secrets internally; raw shared secrets are not returned to the browser.",
+      "status": "passed"
+    }
+  ],
+  "notes": [
+    "This run executes the original paper construction, not a later X-Wing Internet-Draft revision.",
+    "OpenSSL subprocess timings include process startup and file I/O; they are not primitive-only benchmarks.",
+    "This local educational prototype has not been security-audited and is not for production use.",
+    "The browser receives secret fingerprints, not private keys or raw shared secrets."
+  ]
+}

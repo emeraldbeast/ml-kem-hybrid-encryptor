@@ -1,0 +1,8 @@
+test_backend_requires_mlkem_capable_openssl (test_xwing.PaperBaselineTests) ... ok
+test_paper_label_and_sizes (test_xwing.PaperBaselineTests) ... ok
+test_real_xwing_roundtrip (test_xwing.PaperBaselineTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.087s
+
+OK
